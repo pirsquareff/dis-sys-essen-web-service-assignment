@@ -28,3 +28,7 @@ npm test
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Reference
+- vuejs-templates: [https://github.com/vuejs-templates/webpack](https://github.com/vuejs-templates/webpack)
+- node-soap: [https://github.com/vpulim/node-soap](https://github.com/vpulim/node-soap)

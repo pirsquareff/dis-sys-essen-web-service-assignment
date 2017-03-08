@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="domainExtensionWS" targetNamespace="http://localhost:8000/domainExtensionWS" xmlns="http://localhost:8000/domainExtensionWS" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <wsdl:message name="getDomainExtensionRequest">
+    <wsdl:part name="email" type="xs:string"/>
+  </wsdl:message>
+  <wsdl:message name="getDomainExtensionResponse">
+    <wsdl:part name="domainExtension" type="xs:string"/>
+  </wsdl:message>
+  <wsdl:portType name="calcP">
+    <wsdl:operation name="getDomainExtension">
+      <wsdl:input message="getDomainExtensionRequest"/>
+      <wsdl:output message="getDomainExtensionResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="calcB" type="calcP">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getDomainExtension">
+      <soap:operation soapAction="getDomainExtension"/>
+      <wsdl:input>
+        <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DomainExtensionWS">
+    <wsdl:port binding="calcB" name="calc">
+      <soap:address location="http://localhost:8001/domainExtensionWS"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
