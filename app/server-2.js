@@ -27,7 +27,7 @@ var service = {
       getDomainExtension: function(args) {
         var email = args.email;
         console.log(email);
-        var domainExtension = email.split(".").slice(-1)[0];
+        var domainExtension = email.split(".").slice(-1)[0].toUpperCase();
         return { domainExtension: domainExtension };
       },
     }
