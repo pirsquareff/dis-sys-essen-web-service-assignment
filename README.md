@@ -32,3 +32,4 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 ## Reference
 - vuejs-templates: [https://github.com/vuejs-templates/webpack](https://github.com/vuejs-templates/webpack)
 - node-soap: [https://github.com/vpulim/node-soap](https://github.com/vpulim/node-soap)
+- Setting up Vue 2 and Foundation 6: [https://medium.com/@tommaso.marcelli/setting-up-vue-2-and-foundation-6-3f858b4ad20#.k3dgaqn78](https://medium.com/@tommaso.marcelli/setting-up-vue-2-and-foundation-6-3f858b4ad20#.k3dgaqn78)

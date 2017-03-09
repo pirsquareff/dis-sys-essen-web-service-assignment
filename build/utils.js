@@ -44,13 +44,23 @@ exports.cssLoaders = function (options) {
     }
   }
 
+  let sassOptions = {
+    indentedSyntax: true
+  }
+  let scssOptions = {
+    includePaths: [
+      '~src/styles'
+    ],
+    data: '@import "~src/styles/app";'
+  }
+
   // http://vuejs.github.io/vue-loader/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
     postcss: generateLoaders(),
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
-    scss: generateLoaders('sass'),
+    scss: generateLoaders('sass', scssOptions),
     stylus: generateLoaders('stylus'),
     styl: generateLoaders('stylus')
   }
