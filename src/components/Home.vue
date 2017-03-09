@@ -32,7 +32,7 @@
 // var soap = require('soap');
 // "use strict";
 // var url = 'http://localhost:8001/domainExtensionWS?wsdl';
-import soapCall from '../soap-connect';
+import soapCall from '../soap-connect-cors';
 
 export default {
   name: 'home',
