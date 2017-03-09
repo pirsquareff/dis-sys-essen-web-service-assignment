@@ -14,10 +14,13 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
+    "easysoap": "^1.0.6",
     "express": "^4.15.2",
     "soap": "^0.18.0",
+    "soap-as-promised": "^1.16.0",
     "vue": "^2.2.1",
-    "vue-router": "^2.2.0"
+    "vue-router": "^2.2.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

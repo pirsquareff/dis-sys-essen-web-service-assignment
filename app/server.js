@@ -7,8 +7,10 @@ var service = {
   DomainExtensionWS: {
     calc: {
       getDomainExtension: function(args) {
-        var n = args.email;
-        return { email: n };
+        var email = args.email;
+        console.log(email);
+        var domainExtension = email.split(".").slice(-1)[0];
+        return { domainExtension: domainExtension };
       },
     }
   }

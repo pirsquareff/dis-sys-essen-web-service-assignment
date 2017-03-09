@@ -9,7 +9,7 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    app: './src/main.js',
   },
   output: {
     path: config.build.assetsRoot,
@@ -17,6 +17,10 @@ module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
+  },
+  externals: {
+    xmlhttprequest: '{ XMLHttpRequest: XMLHttpRequest }',
+    // 'soap-as-promised': '{ soap: soap }',
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
