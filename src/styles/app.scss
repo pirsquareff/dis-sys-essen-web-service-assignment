@@ -23,7 +23,7 @@ input {
   border: 1px solid $gray;
   outline: 0 !important;
   -webkit-appearance: none;
-  border-radius: 0px;
+  border-radius: 4px;
   background: white;
   box-shadow: none !important;
 }
@@ -40,7 +40,18 @@ label {
 }
 
 button {
+  height: 40px;
+  padding: 0.5em 1em !important;
   font-size: 16px;
   font-weight: bold;
+  background-color: $green;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: $dark-green;
+}
+
+button:active, button:focus {
   background-color: $green;
 }

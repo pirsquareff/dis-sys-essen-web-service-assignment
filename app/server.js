@@ -1,7 +1,25 @@
 var soap = require('soap');
+var express = require('express');
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
+
+var app = express();
+
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', req.get('Origin') || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  res.header('Access-Control-Expose-Headers', 'Content-Length');
+  res.header('Access-Control-Allow-Headers', 'Accept, Authorization, Content-Type, X-Requested-With, Range');
+  if(req.method === 'OPTIONS') {
+    return res.send(200);
+  } else {
+    return next();
+  }
+});
+
+var server = http.createServer(app);
 
 var service = {
   DomainExtensionWS: {
@@ -9,7 +27,7 @@ var service = {
       getDomainExtension: function(args) {
         var email = args.email;
         console.log(email);
-        var domainExtension = email.split(".").slice(-1)[0];
+        var domainExtension = email.split(".").slice(-1)[0].toUpperCase();
         return { domainExtension: domainExtension };
       },
     }
@@ -18,9 +36,5 @@ var service = {
 
 var xml = fs.readFileSync(path.resolve(__dirname, 'domainExtensionWS.wsdl'), 'utf8');
 
-var server = http.createServer(function(request,response) {
-  response.end("404: Not Found: "+request.url);
-});
-
-server.listen(8001);
 soap.listen(server, '/domainExtensionWS', service, xml);
+server.listen(8001);

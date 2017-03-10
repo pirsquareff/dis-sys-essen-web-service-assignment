@@ -1,40 +1,67 @@
 /* eslint-disable */
-// var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 import { XMLHttpRequest } from 'xmlhttprequest';
+import { parseString } from 'xml2js';
 
-export default function soap() {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open('POST', 'http://localhost:8001/domainExtensionWS/', true);
-
-  // build SOAP request
-  var sr =
-    '<?xml version="1.0" encoding="utf-8"?>' +
-    '<soapenv:Envelope ' +
-      'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
-      'xmlns:api="http://127.0.0.1/Integrics/Enswitch/API" ' +
-      'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
-      'xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">' +
-      '<soapenv:Body>' +
-        '<api:getDomainExtension soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">' +
-          '<email>parinthorn.sa.gmail.th</email>' +
-        '</api:getDomainExtension>' +
-      '</soapenv:Body>' +
-    '</soapenv:Envelope>';
-
-  xmlhttp.onreadystatechange = function () {
-    console.log(xmlhttp);
-    if(xmlhttp.readyState == 4) {
-      if(xmlhttp.status == 200) {
-        // alert('done. use firebug/console to see network response');
-        console.log(xmlhttp.responseText);
-      }
-    }
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    // XHR for Chrome/Firefox/Opera/Safari.
+    xhr.open(method, url, true);
+  } else if (typeof XDomainRequest != "undefined") {
+    // XDomainRequest for IE.
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+  } else {
+    // CORS not supported.
+    xhr = null;
   }
-  // Send the POST request
-  xmlhttp.setRequestHeader('Content-Type', 'text/xml');
-  xmlhttp.send(sr);
-  // send request
-  // ...
+  return xhr;
 }
 
-// soap();
+function translateXMLResponse(xml) {
+  return new Promise(function(resolve, reject) {
+    parseString(xml, function (err, result) {
+      console.log(result);
+      resolve(result);
+    });
+  });
+}
+
+export default function soapCall(url, ns, methodName, args) {
+  return new Promise(function(resolve, reject) {
+    var xhr = createCORSRequest('POST', url);
+
+    // build SOAP request
+    var soapRequest =
+  `<?xml version="1.0" encoding="UTF-8"?>
+  <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="${ns}">
+    <SOAP-ENV:Body>
+      <ns1:${methodName}>`;
+
+    // Include all arguments in a request
+    for(var key in args) {
+      soapRequest += `      <ns1:${key}>${args[key]}</ns1:${key}>`;
+    }
+
+    soapRequest +=
+  `    </ns1:${methodName}>
+    </SOAP-ENV:Body>
+  </SOAP-ENV:Envelope>`;
+
+    xhr.onreadystatechange = function() {
+      // console.log(xhr);
+      if(xhr.readyState == 4) {
+        if(xhr.status == 200) {
+          translateXMLResponse(xhr.responseText).then(function(response) {
+            resolve(response);
+          });
+        } else {
+          reject(xhr.statusText);
+        }
+      }
+    }
+
+    xhr.setRequestHeader('Content-Type', 'text/xml');
+    xhr.send(soapRequest);
+  });
+}
