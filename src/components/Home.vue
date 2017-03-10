@@ -1,93 +1,111 @@
 <template>
   <div class="home">
-    <!-- <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul> -->
-    <h1>Domain Extension</h1>
-    Email: <br>
-    <input v-model="email" placeholder="edit me">
-    <br>
-    {{ email }}
-    <button @click="getDomainExtension"></button>
+
+    <!-- <br> -->
+    <form>
+      <div class="row" style="max-width: 600px;">
+        <div class="columns">
+          <div class="row">
+            <div class="columns">
+              <h2 class="header-text">Domain Country Info</h2>
+            </div>
+          </div>
+          <div class="row">
+            <div class="medium-6 columns">
+              <label><span>Name</span>
+                <input v-model="name" id="email" placeholder="Name" type="text">
+              </label>
+            </div>
+
+            <div class="medium-6 columns">
+              <label><span>Student ID</span>
+                <input v-model="studentId" id="email" placeholder="Student ID" type="text">
+              </label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="medium-12 columns">
+              <label><span>Email Address</span>
+                <input v-model="email" id="email" placeholder="Email Address" type="email">
+              </label>
+            </div>
+          </div>
+
+          <button type="button" class="button" @click="computeCountryNameFromEmail">Submit</button>
+          <br>
+          {{ result }}
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-// import soap from 'soap-as-promised';
-// var soap = require('soap');
-// "use strict";
-// var url = 'http://localhost:8001/domainExtensionWS?wsdl';
-import soapCall from '../soap-connect-cors';
+import soapCall from '../utils/soap-connect-cors';
+import { DomainExtensionWS, CountryInfoWS } from '../utils/service-interface';
 
 export default {
   name: 'home',
   data() {
     return {
+      name: '',
+      studentId: '',
       email: '',
       result: '',
     };
   },
   methods: {
-    // getQuote() {
-    //   this.$http
-    //     .get('http://localhost:3001/api/random-quote', (data) => {
-    //       this.quote = data;
-    //     })
-    //     .error((err) => console.log(err))
-    // }
-    getDomainExtension() {
-      soapCall();
-      // soap.createClient('http://localhost:8001/domainExtensionWS')
-      //   .then((client) => client.getDomainExtension({ email: this.email }))
-      //   .then((result) => console.log(`The result was: ${result}`))
-      //   .catch((error) => console.error(`There was an error! ${error}`));
-
-      // soap.createClient(url, function(err, client) {
-      //   if(err) throw err;
-      //   console.log(client.describe().DomainExtensionWS.calc);
-      //   client.getDomainExtension({ email: this.email },function(err, res) {
-      //     if(err) throw err;
-      //     console.log(res);
-      //     this.result = res.domainExtension;
-      //   });
-      // });
-    }
+    computeCountryNameFromEmail() {
+      // Preserve this in promise then method
+      var vueThis = this;
+      soapCall(
+        DomainExtensionWS.url,
+        DomainExtensionWS.ns,
+        DomainExtensionWS.methods.getDomainExtension,
+        {
+          email: vueThis.email,
+        }
+      ).then(function(response) {
+        var domainExtension = response["soap:Envelope"]["soap:Body"]["0"]["undefined:getDomainExtensionResponse"]["0"]["undefined:domainExtension"]["0"];
+        soapCall(
+          CountryInfoWS.url,
+          CountryInfoWS.ns,
+          CountryInfoWS.methods.countryName,
+          {
+            sCountryISOCode: domainExtension,
+          }
+        ).then(function(response) {
+          var countryName = response["soap:Envelope"]["soap:Body"]["0"]["m:CountryNameResponse"]["0"]["m:CountryNameResult"]["0"];
+          vueThis.result = countryName;
+        }).catch(function(error) {
+          console.log("Error: ", error);
+        });
+      }).catch(function(error) {
+        console.log("Error: ", error);
+      });
+    },
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
-}
+<style lang="scss" scoped>
+  h1, h2 {
+    font-weight: bolder;
+  }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  .header-text {
+    // text-align: center;
+  }
 
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
+  label {
+    margin-bottom: 20px;
+  }
 
-a {
-  color: #42b983;
-}
+  label span {
+    display: block;
+    margin-bottom: 7px;
+  }
+
 </style>

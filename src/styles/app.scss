@@ -5,3 +5,42 @@
 @import "./settings";
 // Load Foundation
 @import "~foundation-sites/scss/foundation";
+// Load colors
+@import "./colors";
+
+* {
+  font-family: 'Lato', sans-serif;
+}
+
+body {
+  background: $background-body-color !important;
+}
+
+input {
+  padding: 6px 12px;
+  height: 40px;
+  color: $dark-gray;
+  border: 1px solid $gray;
+  outline: 0 !important;
+  -webkit-appearance: none;
+  border-radius: 0px;
+  background: white;
+  box-shadow: none !important;
+}
+
+input:focus {
+  border: 2px solid $green;
+  // box-shadow: 0 0 5px 0 transparentize($green, 1);
+}
+
+label {
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+button {
+  font-size: 16px;
+  font-weight: bold;
+  background-color: $green;
+}
