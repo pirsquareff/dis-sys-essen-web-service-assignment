@@ -1,5 +1,7 @@
 # Dis Sys Essen Web Service Assignment
 
+![Application's Screenshot](doc/images/screen-capture-of-the-output.png)
+
 > 2110318 Dis Sys Essen assignment. The purpose of this project is to write a distributed application using Web services.
 
 ## How to run this application

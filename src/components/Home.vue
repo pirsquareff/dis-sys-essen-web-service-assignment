@@ -42,10 +42,10 @@
         <div class="form-box result">
           <div class="row">
             <div class="columns" style="text-align: center;">
-              Name is <span class="result-field">{{ name }}</span><br>
-              Student ID is <span class="result-field">{{ studentId }}</span><br>
-              Email is <span class="result-field">{{ email }}</span><br>
-              Email user lives in <span class="result-field">{{ countryNameResult }}</span><br>
+              Name is <span class="result-field">{{ computedName }}</span><br>
+              Student ID is <span class="result-field">{{ computedStudentID }}</span><br>
+              Email is <span class="result-field">{{ computedEmail }}</span><br>
+              Email user lives in <span class="result-field">{{ computedCountryName }}</span><br>
             </div>
           </div>
         </div>
@@ -68,6 +68,20 @@ export default {
       email: '',
       countryNameResult: '',
     };
+  },
+  computed: {
+    computedName() {
+      return this.name == '' ? '<your name>' : this.name;
+    },
+    computedStudentID() {
+      return this.studentId == '' ? '<student ID>' : this.studentId;
+    },
+    computedEmail() {
+      return this.email == '' ? '<email address>' : this.email;
+    },
+    computedCountryName() {
+      return this.countryNameResult == '' ? '<country name>' : this.countryNameResult;
+    }
   },
   methods: {
     computeCountryNameFromEmail() {
